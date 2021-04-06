@@ -47,7 +47,15 @@ module.exports=app=>{
         const count = parseInt(result.count)
 
         app.db({pv: 'produto_venda', p: 'produto', t: 'tamanho', v: 'venda', c: 'cliente', u: 'usuario', pg: 'pagamento'})
-            .select('pv.id', 'pv.quantidade', 'p.descricao as produtoDescricao', 't.descricao  as tamanhoDescricao', 'v.data', 'c.nome as nomeCliente', 'u.nome as nomeUsuario', 'pg.precoTotal')
+            .select(
+                'pv.id', 
+                'pv.quantidade', 
+                'p.descricao as produtoDescricao', 
+                't.descricao  as tamanhoDescricao', 
+                'v.data', 'c.nome as nomeCliente', 
+                'u.nome as nomeUsuario', 
+                'pg.precoTotal'
+            )
             .whereRaw('?? = ??', ['pv.produtoId', 'p.id'])
             .whereRaw('?? = ??', ['pv.tamanhoId', 't.id'])
             .whereRaw('?? = ??', ['pv.vendaId', 'v.id'])
@@ -57,6 +65,37 @@ module.exports=app=>{
             .limit(limit).offset(page * limit - limit)
             .orderBy('id')
             .then(produtoVenda=>res.json({ data: produtoVenda, count, limit }))
+            .catch(err=>res.status(500).send(err))
+    }
+
+    const getById = async (req, res)=>{
+        const { id } = req.params
+        app.db('produto_venda AS pv')
+            .first() 
+            .where('pv.id', id)
+            .join('produto  AS p',      'p.id', '=', 'pv.produtoId')
+            .join('tamanho  AS t',      't.id', '=', 'pv.tamanhoId')
+            .join('venda    AS v',      'v.id', '=', 'pv.vendaId')
+            .join('cliente  AS c',      'c.id', '=', 'v.clienteId')
+            .join('usuario  AS u',      'u.id', '=', 'v.usuarioId')
+            .join('pagamento AS pg',    'pg.id', '=', 'v.pagamentoId')
+            .select(
+                'pv.id', 
+                'pv.quantidade', 
+                'p.descricao as produtoDescricao', 
+                't.descricao  as tamanhoDescricao', 
+                'v.data', 'c.nome as nomeCliente', 
+                'u.nome as nomeUsuario', 
+                'pg.precoTotal'
+            )
+            .then(produtoVenda => {
+                try {
+                    existsOrError(produtoVenda, 'Nenhum venda de produto encontrado!')
+                    res.status(200).json(produtoVenda)
+                } catch (msg) {
+                    return res.status(400).send(msg)
+                }
+            })
             .catch(err=>res.status(500).send(err))
     }
 
@@ -81,5 +120,5 @@ module.exports=app=>{
         }
     }
 
-    return{ save, get, remove }
+    return{ save, get, remove, getById }
 }

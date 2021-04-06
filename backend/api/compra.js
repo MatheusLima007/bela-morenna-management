@@ -57,6 +57,27 @@ module.exports=app=>{
             .catch(err=>res.status(500).send(err))
     }
 
+    const getById = async (req, res)=>{
+        const { id } = req.params
+        app.db('compra AS c')
+            .first() 
+            .where('c.id', id)
+            .join('fornecedor AS f', 'f.id', '=', 'c.fornecedorId')
+            .join('usuario AS u', 'u.id', '=', 'c.usuarioId')
+            .join('pagamento AS p', 'p.id', '=', 'c.pagamentoId')
+            .join('tipo_pagamento AS t', 't.id', '=', 'p.tipoPagamentoId')
+            .select('c.id', 'c.data', 'f.nome as fornecedorNome', 'u.nome as usuarioNome', 'p.precoTotal', 't.descricao')
+            .then(compra => {
+                try {
+                    existsOrError(compra, 'Nenhum compra encontrado!')
+                    res.status(200).json(compra)
+                } catch (msg) {
+                    return res.status(400).send(msg)
+                }
+            })
+            .catch(err=>res.status(500).send(err))
+    }
+
     const remove = async (req, res)=>{
         try{
             const compraProdutoVenda = await app.db('produto_compra')
@@ -78,5 +99,5 @@ module.exports=app=>{
         }
     }
 
-    return{ save, get, remove }
+    return{ save, get, remove, getById }
 }

@@ -5,6 +5,9 @@ module.exports=app=>{
     app.post('/signin', app.api.auth.signin)
     app.post('/validateToken', app.api.auth.validateToken)
 
+    /*
+    *   # ROTAS - TAMANHOS
+    */
     app.route('/tamanhos')
         // .all(app.config.passport.authenticate())
         .post(app.api.tamanho.save)
@@ -15,6 +18,9 @@ module.exports=app=>{
         .put(admin(app.api.tamanho.save))
         .delete(admin(app.api.tamanho.remove))
 
+    /*
+    *   # ROTAS - TIPOPAGAMENTOS
+    */
     app.route('/tipo_pagamentos')
         // .all(app.config.passport.authenticate())
         .post(app.api.tipo_pagamento.save)
@@ -25,6 +31,9 @@ module.exports=app=>{
         .put(admin(app.api.tipo_pagamento.save))
         .delete(admin(app.api.tipo_pagamento.remove))
 
+    /*
+    *   # ROTAS - ENDERECOS
+    */
     app.route('/enderecos')
         // .all(app.config.passport.authenticate())
         .post(app.api.endereco.save)
@@ -33,8 +42,12 @@ module.exports=app=>{
     app.route('/enderecos/:id')
         // .all(app.config.passport.authenticate())
         .put(admin(app.api.endereco.save))
+        .get(app.api.endereco.getById)
         .delete(admin(app.api.endereco.remove))
 
+    /*
+    *   # ROTAS - PAGAMENTOS
+    */
     app.route('/pagamentos')
         // .all(app.config.passport.authenticate())
         .post(app.api.pagamento.save)
@@ -45,6 +58,9 @@ module.exports=app=>{
         .put(admin(app.api.pagamento.save))
         .delete(admin(app.api.pagamento.remove))
 
+    /*
+    *   # ROTAS - PRODUTOS
+    */
     app.route('/produtos')
         // .all(app.config.passport.authenticate())
         .post(app.api.produto.save)
@@ -53,8 +69,12 @@ module.exports=app=>{
     app.route('/produtos/:id')
         // .all(app.config.passport.authenticate())
         .put(admin(app.api.produto.save))
+        .get(app.api.produto.getById)
         .delete(admin(app.api.produto.remove))
 
+    /*
+    *   # ROTAS - CLIENTES
+    */
     app.route('/clientes')
         // .all(app.config.passport.authenticate())
         .post(app.api.cliente.save)
@@ -63,8 +83,12 @@ module.exports=app=>{
     app.route('/clientes/:id')
         // .all(app.config.passport.authenticate())
         .put(admin(app.api.cliente.save))
+        .get(app.api.cliente.getById)
         .delete(admin(app.api.cliente.remove))
 
+    /*
+    *   # ROTAS - USUARIOS
+    */
     app.route('/usuarios')
         // .all(app.config.passport.authenticate())
         .post(app.api.usuario.save)
@@ -76,6 +100,9 @@ module.exports=app=>{
         .get(app.api.usuario.getById)
         .delete(admin(app.api.usuario.remove))
 
+    /*
+    *   # ROTAS - FORNECEDORES
+    */
     app.route('/fornecedores')
         // .all(app.config.passport.authenticate())
         .post(app.api.fornecedor.save)
@@ -84,8 +111,12 @@ module.exports=app=>{
     app.route('/fornecedores/:id')
         // .all(app.config.passport.authenticate())
         .put(admin(app.api.fornecedor.save))
+        .get(app.api.fornecedor.getById)
         .delete(admin(app.api.fornecedor.remove))
 
+    /*
+    *   # ROTAS - VENDAS
+    */
     app.route('/vendas')
         // .all(app.config.passport.authenticate())
         .post(app.api.venda.save)
@@ -94,8 +125,12 @@ module.exports=app=>{
     app.route('/vendas/:id')
         // .all(app.config.passport.authenticate())
         .put(admin(app.api.venda.save))
+        .get(app.api.venda.getById)
         .delete(admin(app.api.venda.remove))
 
+    /*
+    *   # ROTAS - COMPRAS
+    */
     app.route('/compras')
         // .all(app.config.passport.authenticate())
         .post(app.api.compra.save)
@@ -104,8 +139,12 @@ module.exports=app=>{
     app.route('/compras/:id')
         // .all(app.config.passport.authenticate())
         .put(admin(app.api.compra.save))
+        .get(app.api.compra.getById)
         .delete(admin(app.api.compra.remove))
 
+    /*
+    *   # ROTAS - PRODUTOVENDAS
+    */
     app.route('/produto-vendas')
         // .all(app.config.passport.authenticate())
         .post(app.api.produto_venda.save)
@@ -114,8 +153,12 @@ module.exports=app=>{
     app.route('/produto-vendas/:id')
         // .all(app.config.passport.authenticate())
         .put(admin(app.api.produto_venda.save))
+        .get(app.api.produto_venda.getById)
         .delete(admin(app.api.produto_venda.remove))
 
+    /*
+    *   # ROTAS - PRODUTOCOMPRA
+    */
     app.route('/produto-compras')
         // .all(app.config.passport.authenticate())
         .post(app.api.produto_compra.save)
@@ -124,51 +167,7 @@ module.exports=app=>{
     app.route('/produto-compras/:id')
         // .all(app.config.passport.authenticate())
         .put(admin(app.api.produto_compra.save))
+        .get(app.api.produto_compra.getById)
         .delete(admin(app.api.produto_compra.remove))
     
-
-    // app.route('/users')
-        // .all(app.config.passport.authenticate())
-    //     .post(admin(app.api.user.save))
-    //     .get(admin(app.api.user.get))
-
-    // app.route('/users/:id')
-        // .all(app.config.passport.authenticate())
-    //     .put(admin(app.api.user.save))
-    //     .get(admin(app.api.user.getById))
-    //     .delete(admin(app.api.user.remove))
-
-    // app.route('/categories')
-    //     .all(app.config.passport.authenticate())
-    //     .get(admin(app.api.category.get))
-    //     .post(admin(app.api.category.save))
-
-    // app.route('/categories/tree')
-    //     .all(app.config.passport.authenticate())
-    //     .get(app.api.category.getTree)        
-
-    // app.route('/categories/:id')
-    //     .all(app.config.passport.authenticate())
-    //     .get(app.api.category.getById)
-    //     .put(admin(app.api.category.save))
-    //     .delete(admin(app.api.category.remove))
-
-    // app.route('/articles')
-    //     .all(app.config.passport.authenticate())
-    //     .get(admin(app.api.article.get))
-    //     .post(admin(app.api.article.save))
-
-    // app.route('/articles/:id')
-    //     .all(app.config.passport.authenticate())
-    //     .get(app.api.article.getById)
-    //     .put(admin(app.api.article.save))
-    //     .delete(admin(app.api.article.remove))
-
-    // app.route('/categories/:id/articles')
-    //     .all(app.config.passport.authenticate())
-    //     .get(app.api.article.getByCategory)
-
-    // app.route('/stats')
-    //     .all(app.config.passport.authenticate())
-    //     .get(app.api.stat.get)
 }

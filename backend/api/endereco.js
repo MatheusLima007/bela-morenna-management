@@ -63,6 +63,23 @@ module.exports=app=>{
             .catch(err=>res.status(500).send(err))
     }
 
+    const getById = async (req, res)=>{
+        const { id } = req.params
+        app.db('endereco')
+            .first() 
+            .where('id', id)
+            .select('id', 'cep', 'bairro', 'rua', 'numero', 'cidade', 'estado')
+            .then(endereco => {
+                try {
+                    existsOrError(endereco, 'Nenhum endereco encontrado!')
+                    res.status(200).json(endereco)
+                } catch (msg) {
+                    return res.status(400).send(msg)
+                }
+            })
+            .catch(err=>res.status(500).send(err))
+    }
+
     const remove = async (req, res)=>{
         try{
             const enderecoCliente = await app.db('cliente')
@@ -92,5 +109,5 @@ module.exports=app=>{
         }
     }
 
-    return{ save, get, remove }
+    return{ save, get, remove, getById }
 }

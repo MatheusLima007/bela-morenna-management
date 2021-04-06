@@ -62,6 +62,24 @@ module.exports=app=>{
             .catch(err=>res.status(500).send(err))
     }
 
+    const getById = async (req, res)=>{
+        const { id } = req.params
+        app.db('fornecedor AS f')
+            .first() 
+            .where('f.id', id)
+            .join('endereco AS e', 'e.id', '=', 'f.enderecoId')
+            .select('f.id', 'f.nome', 'f.telefone', 'f.cpf', 'f.email', 'e.cep', 'e.bairro', 'e.rua', 'e.numero', 'e.cidade', 'e.estado')
+            .then(fornecedor => {
+                try {
+                    existsOrError(fornecedor, 'Nenhum fornecedor encontrado!')
+                    res.status(200).json(fornecedor)
+                } catch (msg) {
+                    return res.status(400).send(msg)
+                }
+            })
+            .catch(err=>res.status(500).send(err))
+    }
+
     const remove = async (req, res)=>{
         try{
             const fornecedorCompra = await app.db('compra')
@@ -83,5 +101,5 @@ module.exports=app=>{
         }
     }
 
-    return{ save, get, remove }
+    return{ save, get, remove, getById }
 }

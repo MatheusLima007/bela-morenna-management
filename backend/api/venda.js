@@ -55,13 +55,27 @@ module.exports=app=>{
             .orderBy('id')
             .then(venda=>res.json({ data: venda, count, limit }))
             .catch(err=>res.status(500).send(err))
+    }
 
-        // app.db('venda')
-        //     .select('id', 'data', 'clienteId', 'usuarioId', 'pagamentoId')
-        //     .limit(limit).offset(page * limit - limit)
-        //     .orderBy('id')
-        //     .then(venda=>res.json({ data: venda, count, limit }))
-        //     .catch(err=>res.status(500).send(err))
+    const getById = async (req, res)=>{
+        const { id } = req.params
+        app.db('venda AS v')
+            .first() 
+            .where('v.id', id)
+            .join('cliente AS c', 'c.id', '=', 'v.clienteId')
+            .join('usuario AS u', 'u.id', '=', 'v.usuarioId')
+            .join('pagamento AS p', 'p.id', '=', 'v.pagamentoId')
+            .join('tipo_pagamento AS t', 't.id', '=', 'p.tipoPagamentoId')
+            .select('v.id', 'v.data', 'c.nome as nomeCliente', 'u.nome as nomeUsuario', 'p.precoTotal', 't.descricao')
+            .then(venda => {
+                try {
+                    existsOrError(venda, 'Nenhum venda encontrado!')
+                    res.status(200).json(venda)
+                } catch (msg) {
+                    return res.status(400).send(msg)
+                }
+            })
+            .catch(err=>res.status(500).send(err))
     }
 
     const remove = async (req, res)=>{
@@ -85,5 +99,5 @@ module.exports=app=>{
         }
     }
 
-    return{ save, get, remove }
+    return{ save, get, remove, getById }
 }

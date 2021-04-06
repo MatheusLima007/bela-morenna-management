@@ -69,7 +69,14 @@ module.exports=app=>{
             .where('c.id', id)
             .join('endereco AS e', 'e.id', '=', 'c.enderecoId')
             .select('c.id', 'c.nome', 'c.telefone', 'c.cpf', 'c.email', 'e.cep', 'e.bairro', 'e.rua', 'e.numero', 'e.cidade', 'e.estado')
-            .then(usuario=>res.status(200).json(usuario))
+            .then(cliente => {
+                try {
+                    existsOrError(cliente, 'Nenhum cliente encontrado!')
+                    res.status(200).json(cliente)
+                } catch (msg) {
+                    return res.status(400).send(msg)
+                }
+            })
             .catch(err=>res.status(500).send(err))
     }
 
@@ -94,5 +101,5 @@ module.exports=app=>{
         }
     }
 
-    return{ save, get, remove }
+    return{ save, get, remove, getById }
 }

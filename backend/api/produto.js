@@ -55,6 +55,24 @@ module.exports=app=>{
             .catch(err=>res.status(500).send(err))
     }
 
+    const getById = async (req, res)=>{
+        const { id } = req.params
+        app.db('produto AS p')
+            .first() 
+            .where('p.id', id)
+            .join('tamanho AS t', 't.id', '=', 'p.tamanhoId')
+            .select('p.id', 'p.descricao', 'p.quantidade', 'p.marca', 't.descricao')
+            .then(produto => {
+                try {
+                    existsOrError(produto, 'Nenhum produto encontrado!')
+                    res.status(200).json(produto)
+                } catch (msg) {
+                    return res.status(400).send(msg)
+                }
+            })
+            .catch(err=>res.status(500).send(err))
+    }
+
     const remove = async (req, res)=>{
         try{
             const produtoProdutoVenda = await app.db('produto_venda')
@@ -80,5 +98,5 @@ module.exports=app=>{
         }
     }
 
-    return{ save, get, remove }
+    return{ save, get, remove, getById }
 }
