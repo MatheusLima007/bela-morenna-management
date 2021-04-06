@@ -1,14 +1,14 @@
 const bcrypt = require('bcrypt-nodejs')
 
-module.exports=app=>{
+module.exports = app => {
     const { existsOrError, notExistsOrError, equalsOrError } = app.api.validation
 
-    const encryptPassword=password=>{
+    const encryptPassword = password => {
         const salt = bcrypt.genSaltSync(10)
         return bcrypt.hashSync(password, salt)
     }
 
-    const save = async (req,res)=>{
+    const save = async (req,res) => {
         const usuarioBody = { ...req.body }
         if(req.params.id) usuario.id = req.params.id
         

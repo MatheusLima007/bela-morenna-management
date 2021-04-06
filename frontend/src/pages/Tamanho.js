@@ -23,7 +23,9 @@ function Tamanho() {
 
   useEffect(()=>{
     api.get('tamanhos').then(response=>{
-        setLista(response.data)
+        response.data.json().then(tamanhos => {
+          setLista(tamanhos)
+        })
     })
   }, [lista])
 

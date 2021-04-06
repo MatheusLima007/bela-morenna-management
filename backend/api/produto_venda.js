@@ -46,8 +46,14 @@ module.exports=app=>{
         const result = await app.db('produto_venda').count('id').first()
         const count = parseInt(result.count)
 
-        app.db('produto_venda')
-            .select('id', 'quantidade', 'produtoId', 'tamanhoId', 'vendaId')
+        app.db({pv: 'produto_venda', p: 'produto', t: 'tamanho', v: 'venda', c: 'cliente', u: 'usuario', pg: 'pagamento'})
+            .select('pv.id', 'pv.quantidade', 'p.descricao as produtoDescricao', 't.descricao  as tamanhoDescricao', 'v.data', 'c.nome as nomeCliente', 'u.nome as nomeUsuario', 'pg.precoTotal')
+            .whereRaw('?? = ??', ['pv.produtoId', 'p.id'])
+            .whereRaw('?? = ??', ['pv.tamanhoId', 't.id'])
+            .whereRaw('?? = ??', ['pv.vendaId', 'v.id'])
+            .whereRaw('?? = ??', ['v.clienteId', 'c.id'])
+            .whereRaw('?? = ??', ['v.usuarioId', 'u.id'])
+            .whereRaw('?? = ??', ['v.pagamentoId', 'pg.id'])
             .limit(limit).offset(page * limit - limit)
             .orderBy('id')
             .then(produtoVenda=>res.json({ data: produtoVenda, count, limit }))
@@ -77,3 +83,14 @@ module.exports=app=>{
 
     return{ save, get, remove }
 }
+
+
+
+// app.db({a: 'produto_venda', p: 'produto', t: 'tamanho', v: 'venda', c: 'cliente', u: 'usuario', g: 'pagamento'})
+// .select('pv.id', 'pv.quantidade', 'p.descricao', 't.descricao', 'v.id', 'c.nome as nomeCliente', 'u.nome as nomeUsuario', 'g.precoTotal')
+// .whereRaw('?? = ??', ['a.produtoId', 'p.id'])
+// .whereRaw('?? = ??', ['a.tamanhoId', 't.id'])
+// .whereRaw('?? = ??', ['a.vendaId', 'v.id'])
+// .whereRaw('?? = ??', ['v.clienteId', 'c.id'])
+// .whereRaw('?? = ??', ['v.usuarioId', 'u.id'])
+// .whereRaw('?? = ??', ['v.pagamentoId', 'g.id'])

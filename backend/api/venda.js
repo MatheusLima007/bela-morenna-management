@@ -45,12 +45,23 @@ module.exports=app=>{
         const result = await app.db('venda').count('id').first()
         const count = parseInt(result.count)
 
-        app.db('venda')
-            .select('id', 'data', 'clienteId', 'usuarioId', 'pagamentoId')
+        app.db({v: 'venda', c: 'cliente', u: 'usuario', p: 'pagamento', t: 'tipo_pagamento'})
+            .select('v.id', 'v.data', 'c.nome as nomeCliente', 'u.nome as nomeUsuario', 'p.precoTotal', 't.descricao')
+            .whereRaw('?? = ??', ['v.clienteId', 'c.id'])
+            .whereRaw('?? = ??', ['v.usuarioId', 'u.id'])
+            .whereRaw('?? = ??', ['v.pagamentoId', 'p.id'])
+            .whereRaw('?? = ??', ['p.tipoPagamentoId', 't.id'])
             .limit(limit).offset(page * limit - limit)
             .orderBy('id')
             .then(venda=>res.json({ data: venda, count, limit }))
             .catch(err=>res.status(500).send(err))
+
+        // app.db('venda')
+        //     .select('id', 'data', 'clienteId', 'usuarioId', 'pagamentoId')
+        //     .limit(limit).offset(page * limit - limit)
+        //     .orderBy('id')
+        //     .then(venda=>res.json({ data: venda, count, limit }))
+        //     .catch(err=>res.status(500).send(err))
     }
 
     const remove = async (req, res)=>{
