@@ -83,14 +83,3 @@ module.exports=app=>{
 
     return{ save, get, remove }
 }
-
-
-
-// app.db({a: 'produto_venda', p: 'produto', t: 'tamanho', v: 'venda', c: 'cliente', u: 'usuario', g: 'pagamento'})
-// .select('pv.id', 'pv.quantidade', 'p.descricao', 't.descricao', 'v.id', 'c.nome as nomeCliente', 'u.nome as nomeUsuario', 'g.precoTotal')
-// .whereRaw('?? = ??', ['a.produtoId', 'p.id'])
-// .whereRaw('?? = ??', ['a.tamanhoId', 't.id'])
-// .whereRaw('?? = ??', ['a.vendaId', 'v.id'])
-// .whereRaw('?? = ??', ['v.clienteId', 'c.id'])
-// .whereRaw('?? = ??', ['v.usuarioId', 'u.id'])
-// .whereRaw('?? = ??', ['v.pagamentoId', 'g.id'])

@@ -53,9 +53,9 @@ module.exports=app=>{
         const result = await app.db('fornecedor').count('id').first()
         const count = parseInt(result.count)
 
-        app.db({c: 'fornecedor', e: 'endereco'})
-            .select('c.id', 'c.nome', 'c.telefone', 'c.cpf', 'c.email', 'e.cep', 'e.bairro', 'e.rua', 'e.numero', 'e.cidade', 'e.estado')
-            .whereRaw('?? = ??', ['e.id', 'c.enderecoId'])
+        app.db({f: 'fornecedor', e: 'endereco'})
+            .select('f.id', 'f.nome', 'f.telefone', 'f.cpf', 'f.email', 'e.cep', 'e.bairro', 'e.rua', 'e.numero', 'e.cidade', 'e.estado')
+            .whereRaw('?? = ??', ['f.enderecoId', 'e.id'])
             .limit(limit).offset(page * limit - limit)
             .orderBy('id')
             .then(fornecedor=>res.json({ data: fornecedor, count, limit }))

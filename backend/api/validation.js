@@ -18,21 +18,23 @@ module.exports=app=>{
         if(valueA !== valueB) throw msg
     }
 
-    function verificaEstado(valueA, valueB, msg){
-        if(valueA.length > valueB) throw msg
+    function verifyState(valueA, msg){
+        if(valueA.length > 2) throw msg
+        
+        const uf = [
+            'AC','AL','AP','AM','BA','CE','DF','ES','GO',
+            'MA','MT','MS','MG','PA','PB','PR','PE','PI',
+            'RJ','RN','RS','RO','RR','SC','SP','SE','TO'
+        ]
 
-        // const uf = [
-        //     'AC','AL','AP','AM','BA','CE','DF','ES','GO',
-        //     'MA','MT','MS','MG','PA','PB','PR','PE','PI',
-        //     'RJ','RN','RS','RO','RR','SC','SP','SE','TO'
-        // ]
+        for (item of uf){
+            if(item == valueA) {
+                return
+            } 
+        }
 
-        // const result = uf.filter(valueA)
-
-        // console.log(result)
-
-        // if(!result) throw msg
+        throw msg
     }
 
-    return { existsOrError, notExistsOrError, equalsOrError, verificaEstado }
+    return { existsOrError, notExistsOrError, equalsOrError, verifyState}
 }

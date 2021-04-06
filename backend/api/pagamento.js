@@ -44,19 +44,12 @@ module.exports=app=>{
         const result = await app.db('pagamento').count('id').first()
         const count = parseInt(result.count)
 
-        
-        let tipoPagamentoData = app.db('tipo_pagamento')
-                                .select('id', 'descricao')
-                                .orderBy('id')
-                                .then(tipoPagamento=>tipoPagamentoData=tipoPagamento)
-
-
         app.db({p: 'pagamento', t: 'tipo_pagamento'})
             .select('p.id', 'p.precoTotal', 'p.parcela', 't.id as tipoPagamentoId', 't.descricao')
-            .whereRaw('?? = ??', ['t.id', 'p.tipoPagamentoId'])
+            .whereRaw('?? = ??', ['p.tipoPagamentoId', 't.id'])
             .limit(limit).offset(page * limit - limit)
             .orderBy('id')
-            .then(pagamento=>res.json({ data: pagamento, tipoPagamentoData, count, limit }))
+            .then(pagamento=>res.json({ data: pagamento, count, limit }))
             .catch(err=>res.status(500).send(err))
     }
 

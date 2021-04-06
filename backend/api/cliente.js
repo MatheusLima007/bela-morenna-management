@@ -62,6 +62,17 @@ module.exports=app=>{
             .catch(err=>res.status(500).send(err))
     }
 
+    const getById = async (req, res)=>{
+        const { id } = req.params
+        app.db('cliente AS c')
+            .first() 
+            .where('c.id', id)
+            .join('endereco AS e', 'e.id', '=', 'c.enderecoId')
+            .select('c.id', 'c.nome', 'c.telefone', 'c.cpf', 'c.email', 'e.cep', 'e.bairro', 'e.rua', 'e.numero', 'e.cidade', 'e.estado')
+            .then(usuario=>res.status(200).json(usuario))
+            .catch(err=>res.status(500).send(err))
+    }
+
     const remove = async (req, res)=>{
         try{
             const clienteVenda = await app.db('venda')

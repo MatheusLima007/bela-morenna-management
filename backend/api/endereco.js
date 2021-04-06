@@ -1,5 +1,5 @@
 module.exports=app=>{
-    const { existsOrError, notExistsOrError, menorQue, verificaEstado } = app.api.validation
+    const { existsOrError, notExistsOrError, verifyState } = app.api.validation
 
     const save = async (req, res)=>{
         const enderecoBody = { ...req.body }
@@ -23,7 +23,7 @@ module.exports=app=>{
             existsOrError(endereco.numero, 'Número não informado!')
             existsOrError(endereco.cidade, 'Cidade não informada!')
             existsOrError(endereco.estado, 'Estado não informado!')
-            verificaEstado(endereco.estado, 2, 'Estado não encontrado, digite apenas a sigla UF do estado!')
+            verifyState(endereco.estado, 'Estado não encontrado, digite apenas a sigla UF do estado!')
             // const enderecoFromDB = await app.db('endereco')
             //     .where({ cep: endereco.cep }).first()
 
@@ -61,11 +61,6 @@ module.exports=app=>{
             .orderBy('id')
             .then(endereco=>res.json({ data: endereco, count, limit }))
             .catch(err=>res.status(500).send(err))
-
-        // app.db({e: 'endereco', c: 'cidade'})
-        //     .select('e.id', 'e.cep', 'e.bairro', 'e.rua', 'e.numero', 'c.cidade', 'c.estado')
-        //     .whereRaw('?? = ??', ['c.id', 'e.cidadeId'])
-        //     .orderBy('e.id', 'desc')
     }
 
     const remove = async (req, res)=>{
