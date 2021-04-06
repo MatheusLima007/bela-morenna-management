@@ -36,5 +36,9 @@ module.exports=app=>{
         throw msg
     }
 
-    return { existsOrError, notExistsOrError, equalsOrError, verifyState}
+    function lessThan(valueA, valueB, msg){
+        if(valueA.length > valueB) throw msg
+    }
+
+    return { existsOrError, notExistsOrError, equalsOrError, verifyState, lessThan }
 }

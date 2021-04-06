@@ -7,6 +7,7 @@ module.exports=app=>{
         const produtoVenda = {
             id: produtoVendaBody.id,
             quantidade: produtoVendaBody.quantidade,
+            data: produtoVendaBody.data,
             produtoId: produtoVendaBody.produtoId,
             tamanhoId: produtoVendaBody.tamanhoId,
             vendaId: produtoVendaBody.vendaId
@@ -50,6 +51,7 @@ module.exports=app=>{
             .select(
                 'pv.id', 
                 'pv.quantidade', 
+                'pv.data',
                 'p.descricao as produtoDescricao', 
                 't.descricao  as tamanhoDescricao', 
                 'v.data', 'c.nome as nomeCliente', 
@@ -82,6 +84,7 @@ module.exports=app=>{
             .select(
                 'pv.id', 
                 'pv.quantidade', 
+                'pv.data',
                 'p.descricao as produtoDescricao', 
                 't.descricao  as tamanhoDescricao', 
                 'v.data', 'c.nome as nomeCliente', 

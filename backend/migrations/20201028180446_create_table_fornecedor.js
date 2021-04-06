@@ -8,6 +8,7 @@ exports.up = function(knex) {
         table.string('email')
         table.integer('enderecoId').references('id')
             .inTable('endereco').notNull()
+        table.date('deletedAt')
     })
 };
 

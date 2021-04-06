@@ -25,7 +25,7 @@ module.exports = app => {
         }
 
         if(!req.originalUrl.startsWith('/usuarios')) usuario.admin = false
-        //if(!req.user || !req.user.admin) usuario.admin = false
+        if(!req.user || !req.user.admin) usuario.admin = false
 
         try{
             existsOrError(usuario.nome, 'Nome não informado')
@@ -44,23 +44,23 @@ module.exports = app => {
             const usuarioFromDB = await app.db('usuario')
                 .where({ email: usuario.email }).first()
             
-            if(!usuario.id){
+            if(!usuario.id) {
                 notExistsOrError(usuarioFromDB, 'Usuário já cadastrado')
             }
-        } catch(msg){
+        } catch(msg) {
             return res.status(400).send(msg)
         }
 
         usuario.senha = encryptPassword(usuario.senha)
         delete usuario.confirmaSenha
 
-        if(usuario.id){
+        if(usuario.id) {
             app.db('usuario')
                 .update(usuario)
                 .where({ id: usuario.id })
                 .then(_ => res.status(200).json(usuario))
                 .catch(err=>res.status(500).send(err))
-        }else{
+        } else {
             app.db('usuario')
                 .insert(usuario)
                 .then(_ => res.status(201).json(usuario))
@@ -70,7 +70,7 @@ module.exports = app => {
 
     const limit = 10
 
-    const get = async (req, res)=>{
+    const get = async (req, res) => {
         const page = req.query.page || 1
 
         const result = await app.db('usuario').count('id').first()
@@ -85,7 +85,7 @@ module.exports = app => {
             .catch(err=>res.status(500).send(err))
     }
 
-    const getById = async (req, res)=>{
+    const getById = async (req, res) => {
         const {id} = req.params
         app.db('usuario AS c')
             .first() 
@@ -103,8 +103,8 @@ module.exports = app => {
             .catch(err => res.status(500).send(err))
     }
 
-    const remove = async(req, res)=>{
-        try{
+    const remove = async(req, res) => {
+        try {
             const usuarioVenda = await app.db('venda')
                 .where({ usuarioId: req.params.id })
             notExistsOrError(usuarioVenda, 'Venda ja foi cadastrada com esse Usuario.')
@@ -123,7 +123,7 @@ module.exports = app => {
             existsOrError(rowsDeleted, 'Usuário não foi encontrado.')
 
             res.status(204).send()
-        }catch(msg){
+        }catch(msg) {
             res.status(400).send(msg)
         }
     }

@@ -6,6 +6,7 @@ exports.up = function(knex) {
         table.integer('parcela').notNull()
         table.integer('tipoPagamentoId').references('id')
             .inTable('tipo_pagamento').notNull()
+        table.date('deletedAt')
     })
 };
 

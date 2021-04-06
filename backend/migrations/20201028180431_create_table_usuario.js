@@ -10,6 +10,7 @@ exports.up = function(knex) {
         table.boolean('admin').notNull().defaultTo(false)
         table.integer('enderecoId').references('id')
             .inTable('endereco').notNull()
+        table.date('deletedAt')
     })
 };
 

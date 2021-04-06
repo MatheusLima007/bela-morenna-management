@@ -7,6 +7,7 @@ exports.up = function(knex) {
         table.string('marca')
         table.integer('tamanhoId').references('id')
             .inTable('tamanho').notNull()
+        table.date('deletedAt')
     })
 };
 

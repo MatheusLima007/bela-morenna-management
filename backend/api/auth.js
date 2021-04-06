@@ -2,9 +2,9 @@ const { authSecret } = require('../.env')
 const jwt = require('jwt-simple')
 const bcrypt = require('bcrypt-nodejs')
 
-module.exports=app=>{
-    const signin = async (req, res)=>{
-        if(!req.body.email||!req.body.senha){
+module.exports = app => {
+    const signin = async (req, res) => {
+        if(!req.body.email || !req.body.senha) {
             return res.status(400).send('Informe usuário e senha!')
         }
 
@@ -19,7 +19,7 @@ module.exports=app=>{
 
         const now = Math.floor(Date.now()/1000)
 
-        const payload ={
+        const payload = {
             id: usuario.id,
             nome: usuario.name,
             cpf: usuario.cpf,
@@ -35,12 +35,14 @@ module.exports=app=>{
         })
     }
 
-    const validateToken = async (req, res)=>{
-        const userData=req.body||null
+    const validateToken = async (req, res) => {
+        const userData = req.body || null
+        
         try{
-            if(userData){
-                const token=jwt.decode(userData.token, authSecret)
-                if(new Date(token.exp * 1000)>new Date()){
+            if(userData) {
+                const token = jwt.decode(userData.token, authSecret)
+
+                if(new Date(token.exp * 1000) > new Date()){
                     return res.send(true)
                 }
             }
