@@ -8,9 +8,10 @@ exports.up = function(knex) {
         table.string('email').notNull()
         table.string('senha').notNull()
         table.boolean('admin').notNull().defaultTo(false)
+        table.date('deletedAt')
+        table.date('updatedAt')
         table.integer('enderecoId').references('id')
             .inTable('endereco').notNull()
-        table.date('deletedAt')
     })
 };
 

@@ -5,9 +5,10 @@ exports.up = function(knex) {
         table.string('descricao').notNull()
         table.integer('quantidade').notNull()
         table.string('marca')
+        table.date('deletedAt')
+        table.date('updatedAt')
         table.integer('tamanhoId').references('id')
             .inTable('tamanho').notNull()
-        table.date('deletedAt')
     })
 };
 

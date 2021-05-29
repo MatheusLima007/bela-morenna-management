@@ -1,7 +1,7 @@
 const { db } = require('./.env')
 
 module.exports = {
-  client: 'postgresql',
+  client: 'postgres',
   connection: db,
   pool: {
     min: 2,
@@ -11,4 +11,3 @@ module.exports = {
     tableName: 'knex_migrations'
   }
 };
-

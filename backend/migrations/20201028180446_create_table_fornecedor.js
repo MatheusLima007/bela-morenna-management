@@ -4,11 +4,12 @@ exports.up = function(knex) {
         table.increments('id').primary()
         table.string('nome').notNull()
         table.string('telefone').notNull()
-        table.string('cpf')
+        table.string('cnpj')
         table.string('email')
+        table.date('deletedAt')
+        table.date('updatedAt')
         table.integer('enderecoId').references('id')
             .inTable('endereco').notNull()
-        table.date('deletedAt')
     })
 };
 
