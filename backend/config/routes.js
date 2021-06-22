@@ -1,173 +1,195 @@
-const admin = require('./admin')
 
-module.exports=app=>{
-    app.post('/signup', app.api.usuario.save)
-    app.post('/signin', app.api.auth.signin)
-    app.post('/validateToken', app.api.auth.validateToken)
+module.exports = (app) => {
+  app.post("/signup", app.api.usuario.save)
+  app.post("/signin", app.api.auth.signin)
+  app.post("/validateToken", app.api.auth.validateToken)
 
-    /*
-    *   # ROTAS - TAMANHOS
-    */
-    app.route('/tamanhos')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.tamanho.save)
-        .get(app.api.tamanho.get)
+  /*
+   *   # ROTAS - TAMANHOS
+   */
+  app
+    .route("/tamanhos")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.tamanho.save)
+    .get(app.api.tamanho.get)
 
-    app.route('/tamanhos/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.tamanho.save))
-        .delete(admin(app.api.tamanho.remove))
+  app
+    .route("/tamanhos/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.tamanho.save)
+    .delete(app.api.tamanho.remove)
 
-    /*
-    *   # ROTAS - TIPOPAGAMENTOS
-    */
-    app.route('/tipo_pagamentos')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.tipo_pagamento.save)
-        .get(app.api.tipo_pagamento.get)
+  /*
+   *   # ROTAS - TIPOPAGAMENTOS
+   */
+  app
+    .route("/tipo_pagamentos")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.tipo_pagamento.save)
+    .get(app.api.tipo_pagamento.get)
 
-    app.route('/tipo_pagamentos/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.tipo_pagamento.save))
-        .delete(admin(app.api.tipo_pagamento.remove))
+  app
+    .route("/tipo_pagamentos/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.tipo_pagamento.save)
+    .delete(app.api.tipo_pagamento.remove)
 
-    /*
-    *   # ROTAS - ENDERECOS
-    */
-    app.route('/enderecos')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.endereco.save)
-        .get(app.api.endereco.get)
+  /*
+   *   # ROTAS - ENDERECOS
+   */
+  app
+    .route("/enderecos")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.endereco.save)
+    .get(app.api.endereco.get)
 
-    app.route('/enderecos/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.endereco.save))
-        .get(app.api.endereco.getById)
-        .delete(admin(app.api.endereco.remove))
+  app
+    .route("/enderecos/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.endereco.save)
+    .get(app.api.endereco.getById)
+    .delete(app.api.endereco.remove)
 
-    /*
-    *   # ROTAS - PAGAMENTOS
-    */
-    app.route('/pagamentos')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.pagamento.save)
-        .get(app.api.pagamento.get)
+  /*
+   *   # ROTAS - PAGAMENTOS
+   */
+  app
+    .route("/pagamentos")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.pagamento.save)
+    .get(app.api.pagamento.get)
 
-    app.route('/pagamentos/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.pagamento.save))
-        .delete(admin(app.api.pagamento.remove))
+  app
+    .route("/pagamentos/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.pagamento.save)
+    .delete(app.api.pagamento.remove)
 
-    /*
-    *   # ROTAS - PRODUTOS
-    */
-    app.route('/produtos')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.produto.save)
-        .get(app.api.produto.get)
+  /*
+   *   # ROTAS - PRODUTOS
+   */
+  app
+    .route("/produtos")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.produto.save)
+    .get(app.api.produto.get)
 
-    app.route('/produtos/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.produto.save))
-        .get(app.api.produto.getById)
-        .delete(admin(app.api.produto.remove))
+  app
+    .route("/produtos/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.produto.save)
+    .get(app.api.produto.getById)
+    .delete(app.api.produto.remove)
 
-    /*
-    *   # ROTAS - CLIENTES
-    */
-    app.route('/clientes')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.cliente.save)
-        .get(app.api.cliente.get)
+  /*
+   *   # ROTAS - CLIENTES
+   */
+  app
+    .route("/clientes")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.cliente.save)
+    .get(app.api.cliente.get)
 
-    app.route('/clientes/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.cliente.save))
-        .get(app.api.cliente.getById)
-        .delete(admin(app.api.cliente.remove))
+  app
+    .route("/clientes/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.cliente.save)
+    .get(app.api.cliente.getById)
+    .delete(app.api.cliente.remove)
 
-    /*
-    *   # ROTAS - USUARIOS
-    */
-    app.route('/usuarios')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.usuario.save)
-        .get(app.api.usuario.get)
+  /*
+   *   # ROTAS - USUARIOS
+   */
+  app
+    .route("/usuarios")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.usuario.save)
+    .get(app.api.usuario.get);
 
-    app.route('/usuarios/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.usuario.save))
-        .get(app.api.usuario.getById)
-        .delete(admin(app.api.usuario.remove))
+  app
+    .route("/usuarios/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.usuario.save)
+    .get(app.api.usuario.getById)
+    .delete(app.api.usuario.remove)
 
-    /*
-    *   # ROTAS - FORNECEDORES
-    */
-    app.route('/fornecedores')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.fornecedor.save)
-        .get(app.api.fornecedor.get)
+  /*
+   *   # ROTAS - FORNECEDORES
+   */
+  app
+    .route("/fornecedores")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.fornecedor.save)
+    .get(app.api.fornecedor.get);
 
-    app.route('/fornecedores/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.fornecedor.save))
-        .get(app.api.fornecedor.getById)
-        .delete(admin(app.api.fornecedor.remove))
+  app
+    .route("/fornecedores/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.fornecedor.save)
+    .get(app.api.fornecedor.getById)
+    .delete(app.api.fornecedor.remove)
 
-    /*
-    *   # ROTAS - VENDAS
-    */
-    app.route('/vendas')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.venda.save)
-        .get(app.api.venda.get)
+  /*
+   *   # ROTAS - VENDAS
+   */
+  app
+    .route("/vendas")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.venda.save)
+    .get(app.api.venda.get)
 
-    app.route('/vendas/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.venda.save))
-        .get(app.api.venda.getById)
-        .delete(admin(app.api.venda.remove))
+  app
+    .route("/vendas/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.venda.save)
+    .get(app.api.venda.getById)
+    .delete(app.api.venda.remove)
 
-    /*
-    *   # ROTAS - COMPRAS
-    */
-    app.route('/compras')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.compra.save)
-        .get(app.api.compra.get)
+  /*
+   *   # ROTAS - COMPRAS
+   */
+  app
+    .route("/compras")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.compra.save)
+    .get(app.api.compra.get)
 
-    app.route('/compras/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.compra.save))
-        .get(app.api.compra.getById)
-        .delete(admin(app.api.compra.remove))
+  app
+    .route("/compras/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.compra.save)
+    .get(app.api.compra.getById)
+    .delete(app.api.compra.remove)
 
-    /*
-    *   # ROTAS - PRODUTOVENDAS
-    */
-    app.route('/produto-vendas')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.produto_venda.save)
-        .get(app.api.produto_venda.get)
+  /*
+   *   # ROTAS - PRODUTOVENDAS
+   */
+  app
+    .route("/produto-vendas")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.produto_venda.save)
+    .get(app.api.produto_venda.get)
 
-    app.route('/produto-vendas/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.produto_venda.save))
-        .get(app.api.produto_venda.getById)
-        .delete(admin(app.api.produto_venda.remove))
+  app
+    .route("/produto-vendas/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.produto_venda.save)
+    .get(app.api.produto_venda.getById)
+    .delete(app.api.produto_venda.remove)
 
-    /*
-    *   # ROTAS - PRODUTOCOMPRA
-    */
-    app.route('/produto-compras')
-        // .all(app.config.passport.authenticate())
-        .post(app.api.produto_compra.save)
-        .get(app.api.produto_compra.get)
+  /*
+   *   # ROTAS - PRODUTOCOMPRA
+   */
+  app
+    .route("/produto-compras")
+    // .all(app.config.passport.authenticate())
+    .post(app.api.produto_compra.save)
+    .get(app.api.produto_compra.get)
 
-    app.route('/produto-compras/:id')
-        // .all(app.config.passport.authenticate())
-        .put(admin(app.api.produto_compra.save))
-        .get(app.api.produto_compra.getById)
-        .delete(admin(app.api.produto_compra.remove))
-    
+  app
+    .route("/produto-compras/:id")
+    // .all(app.config.passport.authenticate())
+    .put(app.api.produto_compra.save)
+    .get(app.api.produto_compra.getById)
+    .delete(app.api.produto_compra.remove)
 }

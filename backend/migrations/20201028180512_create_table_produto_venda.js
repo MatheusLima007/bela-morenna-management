@@ -6,12 +6,12 @@ exports.up = function(knex) {
         table.datetime('data').defaultTo(knex.fn.now()).notNull()
         table.date('deletedAt')
         table.date('updatedAt')
-        table.integer('produtoId').references('id')
-            .inTable('produto').notNull()
-        table.integer('tamanhoId').references('id')
-            .inTable('tamanho').notNull()
-        table.integer('vendaId').references('id')
-            .inTable('venda').notNull()
+        table.integer('produtoId').unsigned().references('id')
+            .inTable('produto').notNull().onUpdate('CASCADE').onDelete('CASCADE')
+        table.integer('tamanhoId').unsigned().references('id')
+            .inTable('tamanho').notNull().onUpdate('CASCADE').onDelete('CASCADE')
+        table.integer('vendaId').unsigned().references('id')
+            .inTable('venda').notNull().onUpdate('CASCADE').onDelete('CASCADE')
     })
 };
 

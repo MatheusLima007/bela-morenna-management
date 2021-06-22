@@ -7,8 +7,8 @@ exports.up = function(knex) {
         table.string('marca')
         table.date('deletedAt')
         table.date('updatedAt')
-        table.integer('tamanhoId').references('id')
-            .inTable('tamanho').notNull()
+        table.integer('tamanhoId').unsigned().references('id')
+            .inTable('tamanho').notNull().onUpdate('CASCADE').onDelete('CASCADE')
     })
 };
 

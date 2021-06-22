@@ -6,8 +6,8 @@ exports.up = function(knex) {
         table.integer('parcela').notNull()
         table.date('deletedAt')
         table.date('updatedAt')
-        table.integer('tipoPagamentoId').references('id')
-            .inTable('tipo_pagamento').notNull()
+        table.integer('tipoPagamentoId').unsigned().references('id')
+            .inTable('tipo_pagamento').notNull().onUpdate('CASCADE').onDelete('CASCADE')
     })
 };
 

@@ -10,8 +10,8 @@ exports.up = function(knex) {
         table.boolean('admin').notNull().defaultTo(false)
         table.date('deletedAt')
         table.date('updatedAt')
-        table.integer('enderecoId').references('id')
-            .inTable('endereco').notNull()
+        table.integer('enderecoId').unsigned().references('id')
+            .inTable('endereco').notNull().onUpdate('CASCADE').onDelete('CASCADE')
     })
 };
 
