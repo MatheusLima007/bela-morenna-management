@@ -4,12 +4,12 @@ const api = axios.create({
     baseURL: 'http://localhost:3333/',
 })
 
-export async function getSales(data) {
+export async function getPurchases(data) {
     try {
         if(data <= 1){
             data = 1
         }
-        return await api.get(`produto-vendas?page=${data}`).then(response => {
+        return await api.get(`produto-compras?page=${data}`).then(response => {
           //console.log(`response.data`, response.data)
           return { response: response.data }
         })
@@ -18,9 +18,9 @@ export async function getSales(data) {
     }
 }
 
-export async function getByIdSales(id) {
+export async function getByIdPurchases(id) {
     try {
-        return await api.get(`produto-vendas/${id}`).then(response => {
+        return await api.get(`produto-compras/${id}`).then(response => {
             return { response: response.data }
         })
     } catch (error) {
@@ -28,9 +28,9 @@ export async function getByIdSales(id) {
     }
 }
 
-export async function postSales(data) {
+export async function postPurchases(data) {
     try {
-        return await api.post('produto-vendas', data).then(response => {
+        return await api.post('produto-compras', data).then(response => {
             return { response: response.data }
         })
     } catch (error) {
@@ -38,9 +38,9 @@ export async function postSales(data) {
     }
 }
 
-export async function putSales(data, id) {
+export async function putPurchases(data, id) {
     try {
-        return await api.put(`produto-vendas/${id}`, data).then(response => {
+        return await api.put(`produto-compras/${id}`, data).then(response => {
             return { response: response.data }
         })
     } catch (error) {
@@ -48,9 +48,9 @@ export async function putSales(data, id) {
     }
 }
 
-export async function removeSales(id) {
+export async function removePurchases(id) {
     try {
-        return await api.delete(`produto-vendas/${id}`).then(response => {
+        return await api.delete(`produto-compras/${id}`).then(response => {
             return { response: response.data }
         })
     } catch (error) {

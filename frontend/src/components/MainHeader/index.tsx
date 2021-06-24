@@ -1,16 +1,14 @@
 import React, { useMemo, useState } from 'react';
-import Toggle from '../Toggle';
-
-import emojis from '../../utils/emojis';
-
 import { useTheme } from '../../hooks/theme';
+import emojis from '../../utils/emojis';
+import Toggle from '../Toggle';
+import {
+    Container,
+    Profile, UserName, Welcome
+} from './styles';
 
-import { 
-    Container, 
-    Profile, 
-    Welcome, 
-    UserName, 
-}  from './styles';
+
+
 
 
 const MainHeader: React.FC = () => {
@@ -39,7 +37,7 @@ const MainHeader: React.FC = () => {
 
             <Profile>
                 <Welcome>Olá, {emoji}</Welcome>
-                <UserName>Rodrigo Gonçalves</UserName>
+                <UserName>Matheus</UserName>
             </Profile>
         </Container>
     );

@@ -27,8 +27,6 @@ const AuthProvider: React.FC = ({ children }) => {
         } else {
             alert('Senha ou usuário inválidos!')
         }
-
-        
         
         // await api.post(`signin`, payload)
         //     .then(() => {

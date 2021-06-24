@@ -5,7 +5,8 @@ import HistoryFinanceCard from "../../components/HistoryFinanceCard";
 import SelectInput from "../../components/SelectInput";
 import expenses from "../../repositories/expenses";
 import gains from "../../repositories/gains";
-import { get } from '../../services/api/Sales';
+import { getPurchases } from "../../services/api/Purchases";
+import { getSales } from '../../services/api/Sales';
 import formatCurrency from "../../utils/formatCurrency";
 import formatDate from "../../utils/formatDate";
 import listOfMonths from "../../utils/months";
@@ -51,8 +52,21 @@ const List: React.FC<IRouteParams> = ({ match }) => {
 
   const sales = async (data?: any) => {
    
-    const { error, response }: IResponse  = await get(data)
+    const { error, response }: IResponse  = await getSales(data)
 
+    if (error) {
+      alert("Algo de errado não está certo!")
+      return
+    }
+  
+    setData(response.data)
+    //setTotalPage(response.count) 
+  }
+
+  const purchases = async (data?: any) => {
+   
+    const { error, response }: IResponse  = await getPurchases(data)
+    console.log(`response`, response)
     if (error) {
       alert("Algo de errado não está certo!")
       return
@@ -63,12 +77,17 @@ const List: React.FC<IRouteParams> = ({ match }) => {
   }
   
   useEffect(() => {
-    sales()
-  }, [])
+    if(movimentType === "entry-balance") {
+      console.log(`sales`, data)
+      sales()
+    } else {
+      console.log(`purchases`, data)
+      purchases()
+    }
+  }, [movimentType])
 
  
   const pageData = useMemo(() => {
-    console.log(`data`, data)
     return movimentType === "entry-balance"
       ? {
           title: "Vendas",
@@ -104,7 +123,7 @@ const List: React.FC<IRouteParams> = ({ match }) => {
         label: year,
       };
     });
-  }, [pageData]);
+  }, [pageData, movimentType]);
 
   const months = useMemo(() => {
     return listOfMonths.map((month, index) => {
@@ -171,6 +190,7 @@ const List: React.FC<IRouteParams> = ({ match }) => {
       setFormattedData(formattedData);
     }
   }, [
+    data,
     pageData,
     monthSelected,
     yearSelected,
