@@ -22,7 +22,8 @@ interface IRouteParams {
 interface IData {
   id: number
   data: string
-  nomeFornecedor: string
+  nomeFornecedor?: string
+  nomeCliente?: string
   nomeUsuario: string
   precoTotal: string
   produtoDescricao: string
@@ -174,17 +175,32 @@ const List: React.FC<IRouteParams> = ({ match }) => {
         }
       });
     
+      console.log(`filteredData`, filteredData)
+
       const formattedData = filteredData.map((item) => {
-        return {
-          id: item.id,
-          data: formatDate(item.data),
-          nomeFornecedor: item.nomeFornecedor,
-          nomeUsuario: item.nomeUsuario,
-          precoTotal: formatCurrency(Number(item.precoTotal)),
-          produtoDescricao: item.produtoDescricao,
-          quantidade: item.quantidade,
-          tamanhoDescricao: item.tamanhoDescricao
-        };
+        if(movimentType !== 'entry-balance'){
+          return {
+            id: item.id,
+            data: formatDate(item.data),
+            nomeFornecedor: item.nomeFornecedor,
+            nomeUsuario: item.nomeUsuario,
+            precoTotal: formatCurrency(Number(item.precoTotal)),
+            produtoDescricao: item.produtoDescricao,
+            quantidade: item.quantidade,
+            tamanhoDescricao: item.tamanhoDescricao
+          };
+        }else{
+          return {
+            id: item.id,
+            data: formatDate(item.data),
+            nomeCliente: item.nomeCliente,
+            nomeUsuario: item.nomeUsuario,
+            precoTotal: formatCurrency(Number(item.precoTotal)),
+            produtoDescricao: item.produtoDescricao,
+            quantidade: item.quantidade,
+            tamanhoDescricao: item.tamanhoDescricao
+          };
+        }
       });
 
       setFormattedData(formattedData);
@@ -213,15 +229,27 @@ const List: React.FC<IRouteParams> = ({ match }) => {
       </ContentHeader>
 
       <Content>
-        {formattedData.map((item) => (
-          <HistoryFinanceCard
-            key={item.id}
-            tagColor="#4E41F0"
-            title={`Produto: ${item.produtoDescricao}`}
-            subtitle={`Fornecedor: ${item.nomeFornecedor} - Usuario: ${item.nomeUsuario}`}
-            amount={item.precoTotal}
-          />
-        ))}
+        {movimentType !== 'entry-balance' ?
+          formattedData.map((item) => (
+            <HistoryFinanceCard
+              key={item.id}
+              tagColor="#4E41F0"
+              title={`Produto: ${item.produtoDescricao}`}
+              subtitle={`Fornecedor: ${item.nomeFornecedor} - Usuario: ${item.nomeUsuario}`}
+              amount={item.precoTotal}
+            />
+          ))
+          :
+          formattedData.map((item) => (
+            <HistoryFinanceCard
+              key={item.id}
+              tagColor="#4E41F0"
+              title={`Produto: ${item.produtoDescricao}`}
+              subtitle={`Cliente: ${item.nomeCliente} - Usuario: ${item.nomeUsuario}`}
+              amount={item.precoTotal}
+            />
+          ))
+        }
       </Content>
     </Container>
   );

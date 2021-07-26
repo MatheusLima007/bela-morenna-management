@@ -1,6 +1,6 @@
 import React from 'react';
+import { Container, Tag } from './styles';
 
-import { Container, Tag }  from './styles';
 
 interface IHistoryFinanceCardProps {
     tagColor: string;

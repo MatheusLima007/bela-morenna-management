@@ -4,7 +4,7 @@ const api = axios.create({
     baseURL: 'http://localhost:3333/',
 })
 
-export async function get(data) {
+export async function getSize(data) {
     try {
         if(data <= 1){
             data = 1
@@ -18,7 +18,7 @@ export async function get(data) {
     }
 }
 
-export async function getById(id) {
+export async function getSizeById(id) {
     try {
         return await api.get(`tamanhos/${id}`).then(response => {
             return { response: response.data }
@@ -28,7 +28,7 @@ export async function getById(id) {
     }
 }
 
-export async function post(data) {
+export async function postSize(data) {
     try {
         return await api.post('tamanhos', data).then(response => {
             return { response: response.data }
@@ -38,7 +38,7 @@ export async function post(data) {
     }
 }
 
-export async function put(data, id) {
+export async function putSize(data, id) {
     try {
         return await api.put(`tamanhos/${id}`, data).then(response => {
             return { response: response.data }
@@ -48,7 +48,7 @@ export async function put(data, id) {
     }
 }
 
-export async function remove(id) {
+export async function removeSize(id) {
     try {
         return await api.delete(`tamanhos/${id}`).then(response => {
             return { response: response.data }

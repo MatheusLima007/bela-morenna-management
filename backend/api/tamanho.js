@@ -43,14 +43,14 @@ module.exports = app => {
     const limit = 10
 
     const get = async (req, res) => {
-        const page = req.query.page || 1
+        //const page = req.query.page || 1
 
         const result = await app.db('tamanho').count('id').first()
         const count = parseInt(result.count)
 
         app.db('tamanho')
             .select('id', 'descricao')
-            .limit(limit).offset(page * limit - limit)
+            //.limit(limit).offset(page * limit - limit)
             .orderBy('id', 'desc')
             .then(tamanho=>res.json({ data: tamanho, count, limit }))
             .catch(err=>res.status(500).send(err))

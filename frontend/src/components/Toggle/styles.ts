@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import Switch, { ReactSwitchProps } from 'react-switch';
+import styled from 'styled-components';
 
 export const Container = styled.div`
     display: flex;
@@ -9,7 +9,7 @@ export const Container = styled.div`
 export const ToggleLabel = styled.span`
     color: ${props => props.theme.colors.white};
 `;
-
+//@ts-ignore
 export const ToggleSelector = styled(Switch).attrs<ReactSwitchProps>(
     ({ theme }) => ({
         onColor: theme.colors.info,

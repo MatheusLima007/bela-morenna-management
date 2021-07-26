@@ -14,7 +14,7 @@ export const Container = styled.div`
 
 export const Content = styled.main`
   display: flex;
-  //flex: 1;
+  flex: 2;
   flex-direction: row;
   justify-content: start;
   align-items: center;
@@ -25,9 +25,7 @@ export const Content = styled.main`
 `;
 
 export const ContentForm = styled.main`
-  flex-grow: 1;
   display: flex;
-  //width: 100%;
   flex: 1;
   flex-direction: row;
   justify-content: center;
@@ -38,9 +36,8 @@ export const ContentForm = styled.main`
 `;
 
 export const ContentList = styled.main`
-  flex-grow: 1;
   display: flex;
-  //width: 100%;
+  flex-grow: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;

@@ -3,7 +3,7 @@ import Button from '../../components/Button';
 import ContentHeader from '../../components/ContentHeader';
 import Input from '../../components/Input';
 import SimpleCard from '../../components/SimpleCard';
-import { getSize, postSize, putSize, removeSize } from '../../services/api/size';
+import { getPayments, postPayments, putPayments, removePayments } from '../../services/api/payments';
 import { Container, Content, ContentForm, ContentList, Form, FormTitle, List } from './styles';
 
 interface IRouteParams {
@@ -28,7 +28,7 @@ interface IDataSize {
   descricao?: string;
 }
 
-const Sizes: React.FC<IRouteParams> = () => {
+const Payments: React.FC<IRouteParams> = () => {
   const [formValues, setFormValues] = useState<IData>({});
   const [data, setData] = useState<IDataSize[]>([]);
   const [id, setId] = useState<string>('');
@@ -45,7 +45,7 @@ const Sizes: React.FC<IRouteParams> = () => {
     const data = Object.fromEntries(formData);
 
     if (id) {
-      const { error, response }: IResponse = await putSize(data, id);
+      const { error, response }: IResponse = await putPayments(data, id);
 
       if (error) {
         alert(error.data);
@@ -54,7 +54,7 @@ const Sizes: React.FC<IRouteParams> = () => {
 
       alert(`Tamanho ${response.descricao} atualizado com sucesso`);
     } else {
-      const { error, response }: IResponse = await postSize(data);
+      const { error, response }: IResponse = await postPayments(data);
 
       if (error) {
         alert(error.data);
@@ -66,11 +66,11 @@ const Sizes: React.FC<IRouteParams> = () => {
 
     setFormValues({ descricao: '' });
     setId('');
-    listSize();
+    listPayments();
   };
 
-  const listSize = async (data?: any) => {
-    const { error, response }: IResponse = await getSize(data);
+  const listPayments = async (data?: any) => {
+    const { error, response }: IResponse = await getPayments(data);
 
     if (error) {
       alert('Algo de errado não está certo!');
@@ -80,43 +80,43 @@ const Sizes: React.FC<IRouteParams> = () => {
     setData(response.data);
   };
 
-  const deleteOrUpdateSize = async (id?: string, data?: string) => {
+  const deleteOrUpdatePayments = async (id?: string, data?: string) => {
     if (data) {
       setFormValues({ descricao: data });
       setId(id);
     } else {
-      if (window.confirm('Tem certeza que deseja excluir esse tamanho?')) {
-        const { error }: IResponse = await removeSize(id);
+      if (window.confirm('Tem certeza que deseja excluir esse tipo de pagamento?')) {
+        const { error }: IResponse = await removePayments(id);
 
         if (error) {
           alert('Algo de errado não está certo!');
           return;
         }
 
-        listSize();
+        listPayments();
       }
     }
   };
 
   useEffect(() => {
-    listSize();
+    listPayments();
   }, []);
 
   return (
     <Container>
-      <ContentHeader title="Tamanhos" lineColor="#4E41F0">
+      <ContentHeader title="Pagamentos" lineColor="#4E41F0">
         {' '}
       </ContentHeader>
 
       <Content>
         <ContentForm>
           <Form onSubmit={handleSubmit}>
-            <FormTitle>Cadastrar tamanho</FormTitle>
+            <FormTitle>Cadastrar forma de pagamento</FormTitle>
 
             <Input
               name="descricao"
               type="descricao"
-              placeholder="Digite o tamanaho para cadastrar..."
+              placeholder="Digite a forma pagamento para cadastrar..."
               required
               value={formValues.descricao}
               onChange={handleInputChange}
@@ -131,11 +131,11 @@ const Sizes: React.FC<IRouteParams> = () => {
               <SimpleCard
                 key={item.id}
                 tagColor="#05a048"
-                title="Descricao do tamanho"
+                title="Descricao da forma pagamento"
                 id={item.id}
                 data={item.descricao}
                 amount={item?.descricao}
-                callback={deleteOrUpdateSize}
+                callback={deleteOrUpdatePayments}
               />
             ))}
           </List>
@@ -145,4 +145,4 @@ const Sizes: React.FC<IRouteParams> = () => {
   );
 };
 
-export default Sizes;
+export default Payments;

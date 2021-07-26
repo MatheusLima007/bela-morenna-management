@@ -7,7 +7,7 @@ import {
   MdClose,
   MdDashboard,
   MdExitToApp,
-  MdMenu
+  MdMenu,
 } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import logoImg from '../../assets/logo.svg';
@@ -27,7 +27,7 @@ import {
   MenuItemLinkDropdown,
   ThemeToggleFooter,
   Title,
-  ToggleMenu
+  ToggleMenu,
 } from './styles';
 
 const Aside: React.FC = () => {
@@ -138,7 +138,7 @@ const Aside: React.FC = () => {
               </Link>
             </DropdownLi>
             <DropdownLi>
-              <Link to="/register/sizes/989" style={{ textDecoration: 'none' }}>
+              <Link to="/register/sizes" style={{ textDecoration: 'none' }}>
                 <MenuItemLinkDropdown>
                   <BsFolderPlus />
                   Tamanhos
