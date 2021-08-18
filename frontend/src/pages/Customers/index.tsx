@@ -54,7 +54,47 @@ const Customers: React.FC<IRouteParams> = () => {
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
 
-    setFormValues({ ...formValues, [name]: value });
+    if (name === 'cpf') {
+      setFormValues({ ...formValues, [name]: mCPF(e.target.value) });
+      return;
+    }
+
+    if (name === 'telefone') {
+      setFormValues({ ...formValues, [name]: phone(e.target.value) });
+      return;
+    }
+
+    if (name === 'cep') {
+      setFormValues({ ...formValues, [name]: cep(e.target.value) });
+      return;
+    }
+
+    setFormValues({ ...formValues, [name]: e.target.value });
+  };
+
+  const mCPF = cpf => {
+    return cpf
+      .replace(/\D/g, '')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1');
+  };
+
+  const phone = value => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{4})(\d)/, '$1-$2')
+      .replace(/(\d{4})-(\d)(\d{4})/, '$1$2-$3')
+      .replace(/(-\d{4})\d+?$/, '$1');
+  };
+
+  const cep = value => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/(-\d{3})\d+?$/, '$1');
   };
 
   const handleSubmit = async (e: any) => {
@@ -211,7 +251,7 @@ const Customers: React.FC<IRouteParams> = () => {
 
               <ContainerInput>
                 <InputForm
-                  type="number"
+                  type="text"
                   name="telefone"
                   onChange={handleInputChange}
                   value={formValues?.telefone}
@@ -223,7 +263,7 @@ const Customers: React.FC<IRouteParams> = () => {
 
             <Flex>
               <ContainerInput>
-                <InputForm type="number" name="cep" onChange={handleInputChange} value={formValues?.cep} required />
+                <InputForm type="text" name="cep" onChange={handleInputChange} value={formValues?.cep} required />
                 <Span>CEP</Span>
               </ContainerInput>
 

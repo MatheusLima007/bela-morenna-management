@@ -7,6 +7,7 @@ import {
   MdClose,
   MdDashboard,
   MdExitToApp,
+  MdLibraryBooks,
   MdMenu,
 } from 'react-icons/md';
 import { Link } from 'react-router-dom';
@@ -147,6 +148,13 @@ const Aside: React.FC = () => {
             </DropdownLi>
           </DropdownUl>
         </MenuItem>
+
+        <Link to="/reports" style={{ textDecoration: 'none' }}>
+          <MenuItemLink>
+            <MdLibraryBooks />
+            Relatórios
+          </MenuItemLink>
+        </Link>
 
         <MenuItemButton onClick={signOut}>
           <MdExitToApp />

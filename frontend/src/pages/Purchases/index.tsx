@@ -3,17 +3,15 @@ import Button from '../../components/Button';
 import ContentHeader from '../../components/ContentHeader';
 import MediumCard from '../../components/MediumCard';
 import PurchasesCard from '../../components/PurchasesCard';
-import SalesCard from '../../components/SalesCard';
-import { getCustomers } from '../../services/api/customers';
 import { postPayments, putPayments } from '../../services/api/payments';
 import { getProducts } from '../../services/api/products';
+import { getProviders } from '../../services/api/providers';
 import { postPurchase, putPurchase } from '../../services/api/Purchase';
-import { postSale, putSale } from '../../services/api/Sale';
-import { getSales, postSales, putSales, removeSales } from '../../services/api/Sales';
+import { getPurchases, postPurchases, putPurchases, removePurchases } from '../../services/api/Purchases';
 import { getSize } from '../../services/api/size';
 import { getTypePayments } from '../../services/api/type-payments';
-import { ICustomersData } from '../Customers';
 import { IProductsData } from '../Products';
+import { IProvidersData } from '../Providers';
 import { IDataSize } from '../Sizes';
 import {
   Container,
@@ -43,10 +41,10 @@ interface IResponse {
   error?: any;
 }
 
-export interface ISalesData {
+export interface IPurchasesData {
   id?: number;
   quantidade: number;
-  clienteId: number;
+  fornecedorId: number;
   usuarioId: number;
   pagamentoId: number;
 
@@ -61,14 +59,14 @@ export interface ISalesData {
   produtoDescricao?: string;
   tamanhoDescricao?: string;
   data?: string;
-  nomeCliente?: string;
+  nomeFornecedor?: string;
   nomeUsuario?: string;
 }
 
-const Sales: React.FC<IRouteParams> = () => {
-  const [formValues, setFormValues] = useState<ISalesData | null>();
-  const [data, setData] = useState<ISalesData[]>([]);
-  const [dataCustomers, setDataCustomers] = useState<ICustomersData[]>([]);
+const Purchases: React.FC<IRouteParams> = () => {
+  const [formValues, setFormValues] = useState<IPurchasesData | null>();
+  const [data, setData] = useState<IPurchasesData[]>([]);
+  const [dataProviders, setDataProviders] = useState<IProvidersData[]>([]);
   const [dataProducts, setDataProducts] = useState<IProductsData[]>([]);
   const [dataSizes, setDataSizes] = useState<IDataSize[]>([]);
   const [dataTypePayments, setDataTypePayments] = useState<IDataSize[]>([]);
@@ -91,30 +89,30 @@ const Sales: React.FC<IRouteParams> = () => {
     };
 
     if (id) {
-      await putPayments(dataPayments)
+      await putPayments(dataPayments, formValues?.pagamentoId)
         .then(async (data: IResponse) => {
-          const dataSale = {
-            clienteId: formValues.clienteId,
+          const dataPurchase = {
+            fornecedorId: formValues.fornecedorId,
             usuarioId: formValues.usuarioId,
             pagamentoId: data.response.id,
           };
 
-          await putSale(dataSale)
+          await putPurchase(dataPurchase, formValues?.compraId)
             .then(async (data: IResponse) => {
-              const dataSales = {
+              const dataPurchases = {
                 quantidade: formValues.quantidade,
                 produtoId: formValues.produtoId,
                 tamanhoId: formValues.tamanhoId,
                 compraId: data.response.id,
               };
 
-              const { error, response }: IResponse = await putSales(dataSales);
+              const { error, response }: IResponse = await putPurchases(dataPurchases, id);
               if (error) {
                 alert(error.data);
                 return;
               }
 
-              alert(`Venda atualizada com sucesso`);
+              alert(`Compra atualizada com sucesso`);
             })
             .catch(error => {
               console.log(`err`, error.data);
@@ -126,28 +124,28 @@ const Sales: React.FC<IRouteParams> = () => {
     } else {
       await postPayments(dataPayments)
         .then(async (data: IResponse) => {
-          const dataSale = {
-            clienteId: formValues.clienteId,
+          const dataPurchase = {
+            fornecedorId: formValues.fornecedorId,
             usuarioId: 2,
             pagamentoId: data.response.id,
           };
 
-          await postSale(dataSale)
+          await postPurchase(dataPurchase)
             .then(async (data: IResponse) => {
-              const dataSales = {
+              const dataPurchases = {
                 quantidade: formValues.quantidade,
                 produtoId: formValues.produtoId,
                 tamanhoId: formValues.tamanhoId,
-                vendaId: data.response.id,
+                compraId: data.response.id,
               };
 
-              const { error, response }: IResponse = await postSales(dataSales);
+              const { error, response }: IResponse = await postPurchases(dataPurchases);
               if (error) {
                 alert(error.data);
                 return;
               }
 
-              alert(`Venda criada com sucesso`);
+              alert(`Compra criada com sucesso`);
             })
             .catch(error => {
               console.log(`err`, error.data);
@@ -161,7 +159,7 @@ const Sales: React.FC<IRouteParams> = () => {
     setFormValues({
       id: null,
       quantidade: null,
-      clienteId: null,
+      fornecedorId: null,
       usuarioId: null,
       pagamentoId: null,
 
@@ -174,15 +172,15 @@ const Sales: React.FC<IRouteParams> = () => {
       tipoPagamentoId: null,
     });
     setId(0);
-    listSales();
-    listCustomers();
+    listPurchases();
+    listProviders();
     listProducts();
     listSize();
     listPayments();
   };
 
-  const listSales = async (data?: any) => {
-    const { error, response }: IResponse = await getSales(data);
+  const listPurchases = async (data?: any) => {
+    const { error, response }: IResponse = await getPurchases(data);
 
     if (error) {
       alert('Algo de errado não está certo!');
@@ -192,15 +190,15 @@ const Sales: React.FC<IRouteParams> = () => {
     setData(response?.data);
   };
 
-  const listCustomers = async (data?: any) => {
-    const { error, response }: IResponse = await getCustomers();
+  const listProviders = async (data?: any) => {
+    const { error, response }: IResponse = await getProviders();
 
     if (error) {
       alert('Algo de errado não está certo!');
       return;
     }
 
-    setDataCustomers(response?.data);
+    setDataProviders(response?.data);
   };
 
   const listProducts = async (data?: any) => {
@@ -236,21 +234,21 @@ const Sales: React.FC<IRouteParams> = () => {
     setDataTypePayments(response.data);
   };
 
-  const deleteOrUpdateSales = async (id?: number, data?: ISalesData) => {
+  const deleteOrUpdatePurchases = async (id?: number, data?: IPurchasesData) => {
     if (data) {
       setFormValues(data);
       setId(id);
     } else {
-      if (window.confirm('Tem certeza que deseja excluir essa Venda?')) {
-        const { error }: IResponse = await removeSales(id);
+      if (window.confirm('Tem certeza que deseja excluir esse Compra?')) {
+        const { error }: IResponse = await removePurchases(id);
 
         if (error) {
           alert(error.data);
           return;
         }
 
-        listSales();
-        listCustomers();
+        listPurchases();
+        listProviders();
         listProducts();
         listSize();
         listPayments();
@@ -259,8 +257,8 @@ const Sales: React.FC<IRouteParams> = () => {
   };
 
   useEffect(() => {
-    listSales();
-    listCustomers();
+    listPurchases();
+    listProviders();
     listProducts();
     listSize();
     listPayments();
@@ -278,20 +276,21 @@ const Sales: React.FC<IRouteParams> = () => {
     }
   }, [formValues?.produtoId]);
 
+  console.log(`formValues`, formValues);
   return (
     <Container>
-      <ContentHeader title="Vendas" lineColor="#4E41F0">
+      <ContentHeader title="Compras" lineColor="#4E41F0">
         {' '}
       </ContentHeader>
 
       <Content>
         <ContentForm>
           <Form onSubmit={handleSubmit}>
-            <FormTitle>Realizar Venda</FormTitle>
+            <FormTitle>Realizar Compra</FormTitle>
 
-            <Select name="clienteId" onChange={onChange} value={formValues?.clienteId}>
-              <option value="">Selecione o Cliente</option>
-              {dataCustomers && dataCustomers.map(provider => <option value={provider.id}>{provider.nome}</option>)}
+            <Select name="fornecedorId" onChange={onChange} value={formValues?.fornecedorId}>
+              <option value="">Selecione o Fornecedor</option>
+              {dataProviders && dataProviders.map(provider => <option value={provider.id}>{provider.nome}</option>)}
             </Select>
 
             <Select name="produtoId" onChange={onChange} value={formValues?.produtoId}>
@@ -304,7 +303,7 @@ const Sales: React.FC<IRouteParams> = () => {
                 ))}
             </Select>
 
-            {/* <Select placeholder="selecione">
+            {/* <Select name="tamanhoId" onChange={onChange} value={formValues?.tamanhoId}>
               <option value="">Selecione o Tamanho</option>
               {dataSizes && dataSizes.map(size => <option value={size.id}>{size.descricao}</option>)}
             </Select> */}
@@ -357,7 +356,7 @@ const Sales: React.FC<IRouteParams> = () => {
           <List>
             {data &&
               data.map(item => (
-                <SalesCard key={item.id} tagColor="#05a048" data={item} callback={deleteOrUpdateSales} />
+                <PurchasesCard key={item.id} tagColor="#05a048" data={item} callback={deleteOrUpdatePurchases} />
               ))}
           </List>
         </ContentList>
@@ -366,4 +365,4 @@ const Sales: React.FC<IRouteParams> = () => {
   );
 };
 
-export default Sales;
+export default Purchases;

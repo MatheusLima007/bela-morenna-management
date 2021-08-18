@@ -4,13 +4,10 @@ const api = axios.create({
   baseURL: 'http://localhost:3333/',
 });
 
-export async function getPayments(data) {
+export async function getSale(data) {
   try {
-    if (data <= 1) {
-      data = 1;
-    }
-    return await api.get(`pagamentos?page=${data}`).then(response => {
-      console.log(`response.data`, response.data);
+    return await api.get(`vendas?${data}`).then(response => {
+      //console.log(`response.data`, response.data)
       return { response: response.data };
     });
   } catch (error) {
@@ -18,9 +15,9 @@ export async function getPayments(data) {
   }
 }
 
-export async function getPaymentsById(id) {
+export async function getByIdSale(id) {
   try {
-    return await api.get(`pagamentos/${id}`).then(response => {
+    return await api.get(`vendas/${id}`).then(response => {
       return { response: response.data };
     });
   } catch (error) {
@@ -28,9 +25,9 @@ export async function getPaymentsById(id) {
   }
 }
 
-export async function postPayments(data) {
+export async function postSale(data) {
   try {
-    return await api.post('pagamentos', data).then(response => {
+    return await api.post('vendas', data).then(response => {
       return { response: response.data };
     });
   } catch (error) {
@@ -38,9 +35,9 @@ export async function postPayments(data) {
   }
 }
 
-export async function putPayments(data, id) {
+export async function putSale(data, id) {
   try {
-    return await api.put(`pagamentos/${id}`, data).then(response => {
+    return await api.put(`vendas/${id}`, data).then(response => {
       return { response: response.data };
     });
   } catch (error) {
@@ -48,9 +45,9 @@ export async function putPayments(data, id) {
   }
 }
 
-export async function removePayments(id) {
+export async function removeSale(id) {
   try {
-    return await api.delete(`pagamentos/${id}`).then(response => {
+    return await api.delete(`vendas/${id}`).then(response => {
       return { response: response.data };
     });
   } catch (error) {

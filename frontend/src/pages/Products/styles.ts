@@ -12,6 +12,25 @@ export const Container = styled.div`
   background-color: ${props => props.theme.colors.primary};
 `;
 
+export const Button = styled.button`
+  width: 100%;
+
+  margin: 60px 0 10px 0;
+  padding: 10px;
+
+  border-radius: 5px;
+
+  font-weight: bold;
+  color: ${props => props.theme.colors.white};
+  background-color: ${props => props.theme.colors.warning};
+
+  transition: opacity 0.3s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
 export const Content = styled.main`
   display: flex;
   flex: 2;
@@ -131,6 +150,7 @@ export const Form = styled.form`
 export const FormTitle = styled.h1`
   font-size: 24px;
   color: ${props => props.theme.colors.white};
+  margin-bottom: 60px;
 
   &:after {
     content: '';
@@ -143,6 +163,20 @@ export const FormTitle = styled.h1`
 export const Flex = styled.div`
   display: flex;
   gap: 15px;
+`;
+
+export const Select = styled.select`
+  background-color: ${props => props.theme.colors.tertiary};
+  padding: 10px 20px;
+
+  color: ${props => props.theme.colors.white};
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  font-family: sans-serif;
+
+  border: 1px solid ${props => props.theme.colors.white};
+  border-radius: 5px;
 `;
 
 export const ContainerInput = styled.div`
@@ -190,18 +224,4 @@ export const InputForm = styled.input`
 
     background: ${props => props.theme.colors.tertiary};
   }
-`;
-
-export const Select = styled.select`
-  background-color: ${props => props.theme.colors.tertiary};
-  padding: 10px 20px;
-
-  color: ${props => props.theme.colors.white};
-  font-size: 16px;
-  letter-spacing: 0.05em;
-  font-weight: 600;
-  font-family: sans-serif;
-
-  border: 1px solid ${props => props.theme.colors.white};
-  border-radius: 5px;
 `;

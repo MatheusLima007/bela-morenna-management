@@ -3,7 +3,12 @@ import Button from '../../components/Button';
 import ContentHeader from '../../components/ContentHeader';
 import Input from '../../components/Input';
 import SimpleCard from '../../components/SimpleCard';
-import { getPayments, postPayments, putPayments, removePayments } from '../../services/api/payments';
+import {
+  getTypePayments,
+  postTypePayments,
+  putTypePayments,
+  removeTypePayments,
+} from '../../services/api/type-payments';
 import { Container, Content, ContentForm, ContentList, Form, FormTitle, List } from './styles';
 
 interface IRouteParams {
@@ -45,7 +50,7 @@ const Payments: React.FC<IRouteParams> = () => {
     const data = Object.fromEntries(formData);
 
     if (id) {
-      const { error, response }: IResponse = await putPayments(data, id);
+      const { error, response }: IResponse = await putTypePayments(data, id);
 
       if (error) {
         alert(error.data);
@@ -54,7 +59,7 @@ const Payments: React.FC<IRouteParams> = () => {
 
       alert(`Tamanho ${response.descricao} atualizado com sucesso`);
     } else {
-      const { error, response }: IResponse = await postPayments(data);
+      const { error, response }: IResponse = await postTypePayments(data);
 
       if (error) {
         alert(error.data);
@@ -70,7 +75,7 @@ const Payments: React.FC<IRouteParams> = () => {
   };
 
   const listPayments = async (data?: any) => {
-    const { error, response }: IResponse = await getPayments(data);
+    const { error, response }: IResponse = await getTypePayments(data);
 
     if (error) {
       alert('Algo de errado não está certo!');
@@ -86,7 +91,7 @@ const Payments: React.FC<IRouteParams> = () => {
       setId(id);
     } else {
       if (window.confirm('Tem certeza que deseja excluir esse tipo de pagamento?')) {
-        const { error }: IResponse = await removePayments(id);
+        const { error }: IResponse = await removeTypePayments(id);
 
         if (error) {
           alert('Algo de errado não está certo!');

@@ -23,7 +23,7 @@ interface IData {
   descricao?: string;
 }
 
-interface IDataSize {
+export interface IDataSize {
   id: string;
   descricao?: string;
 }
