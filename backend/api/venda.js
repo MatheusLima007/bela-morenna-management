@@ -70,8 +70,8 @@ module.exports = (app) => {
       .select(
         "v.id",
         "v.data",
-        "c.nome as nomeCliente",
-        "u.nome as nomeUsuario",
+        "c.nome as clienteNome",
+        "u.nome as usuarioNome",
         "p.precoTotal",
         "t.descricao"
       )
@@ -79,10 +79,10 @@ module.exports = (app) => {
       .whereRaw("?? = ??", ["v.usuarioId", "u.id"])
       .whereRaw("?? = ??", ["v.pagamentoId", "p.id"])
       .whereRaw("?? = ??", ["p.tipoPagamentoId", "t.id"])
-      .limit(limit)
-      .offset(page * limit - limit)
+      // .limit(limit)
+      // .offset(page * limit - limit)
       .orderBy("id", "desc")
-      .then((venda) => res.json({ data: venda, count, limit }))
+      .then((data) => res.json(data))
       .catch((err) => res.status(500).send(err));
   };
 
@@ -90,19 +90,26 @@ module.exports = (app) => {
     const { id } = req.params;
     app
       .db("venda AS v")
-      .first()
+      //.first()
       .where("v.id", id)
-      .join("cliente AS c", "c.id", "=", "v.clienteId")
-      .join("usuario AS u", "u.id", "=", "v.usuarioId")
-      .join("pagamento AS p", "p.id", "=", "v.pagamentoId")
-      .join("tipo_pagamento AS t", "t.id", "=", "p.tipoPagamentoId")
+      .leftJoin("cliente AS c", "c.id", "=", "v.clienteId")
+      .leftJoin("usuario AS u", "u.id", "=", "v.usuarioId")
+      .leftJoin("pagamento AS pag", "pag.id", "=", "v.pagamentoId")
+      .leftJoin("tipo_pagamento AS tp", "tp.id", "=", "pag.tipoPagamentoId")
+      .leftJoin("produto_venda AS pv", "v.id", "pv.vendaId")
+      .leftJoin("produto AS p", "pv.produtoId", "p.id")
+      .leftJoin("tamanho AS t", "p.tamanhoId", "t.id")
       .select(
         "v.id",
         "v.data",
-        "c.nome as nomeCliente",
-        "u.nome as nomeUsuario",
-        "p.precoTotal",
-        "t.descricao"
+        "c.nome as clienteNome",
+        "u.nome as usuarioNome",
+        "pag.precoTotal",
+        "tp.descricao as tipoPagamento",
+        "pv.quantidade",
+        "p.descricao as produto",
+        "p.marca",
+        "t.descricao as tamanho"
       )
       .then((venda) => {
         try {

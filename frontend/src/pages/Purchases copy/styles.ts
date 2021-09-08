@@ -31,7 +31,6 @@ export const ContentForm = styled.main`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  //width: 700px;
   height: calc(100vh - 200px);
 
   background-color: ${props => props.theme.colors.primary};
@@ -146,14 +145,6 @@ export const Flex = styled.div`
   gap: 15px;
 `;
 
-export const FlexContainer = styled.div`
-  display: flex;
-  gap: 15px;
-  padding: 8px;
-  border-radius: 5px;
-  border: solid 1px ${props => props.theme.colors.white};
-`;
-
 export const ContainerInput = styled.div`
   position: relative;
   box-sizing: content-box;
@@ -202,7 +193,6 @@ export const InputForm = styled.input`
 `;
 
 export const Select = styled.select`
-  //flex-grow: 1;
   background-color: ${props => props.theme.colors.tertiary};
   padding: 10px 20px;
 

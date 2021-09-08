@@ -79,10 +79,10 @@ module.exports = (app) => {
       .whereRaw("?? = ??", ["c.usuarioId", "u.id"])
       .whereRaw("?? = ??", ["c.pagamentoId", "p.id"])
       .whereRaw("?? = ??", ["p.tipoPagamentoId", "t.id"])
-      .limit(limit)
-      .offset(page * limit - limit)
+      //.limit(limit)
+      //.offset(page * limit - limit)
       .orderBy("id", "desc")
-      .then((compra) => res.json({ data: compra, count, limit }))
+      .then((data) => res.json(data))
       .catch((err) => res.status(500).send(err));
   };
 
@@ -90,19 +90,26 @@ module.exports = (app) => {
     const { id } = req.params;
     app
       .db("compra AS c")
-      .first()
+      // .first()
       .where("c.id", id)
-      .join("fornecedor AS f", "f.id", "=", "c.fornecedorId")
-      .join("usuario AS u", "u.id", "=", "c.usuarioId")
-      .join("pagamento AS p", "p.id", "=", "c.pagamentoId")
-      .join("tipo_pagamento AS t", "t.id", "=", "p.tipoPagamentoId")
+      .leftJoin("fornecedor AS f", "f.id", "=", "c.fornecedorId")
+      .leftJoin("usuario AS u", "u.id", "=", "c.usuarioId")
+      .leftJoin("pagamento AS pag", "pag.id", "=", "c.pagamentoId")
+      .leftJoin("tipo_pagamento AS tp", "tp.id", "=", "pag.tipoPagamentoId")
+      .leftJoin("produto_compra AS pc", "c.id", "pc.compraId")
+      .leftJoin("produto AS p", "pc.produtoId", "p.id")
+      .leftJoin("tamanho AS t", "p.tamanhoId", "t.id")
       .select(
         "c.id",
         "c.data",
         "f.nome as fornecedorNome",
         "u.nome as usuarioNome",
-        "p.precoTotal",
-        "t.descricao"
+        "pag.precoTotal",
+        "tp.descricao as tipoPagamento",
+        "pc.quantidade",
+        "p.descricao as produto",
+        "p.marca",
+        "t.descricao as tamanho"
       )
       .then((compra) => {
         try {

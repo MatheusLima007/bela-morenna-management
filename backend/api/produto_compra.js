@@ -34,7 +34,8 @@ module.exports = (app) => {
       app
         .db("produto_compra")
         .insert(produtoCompra)
-        .then((_) => res.status(201).json(produtoCompra))
+        .returning("*")
+        .then((data) => res.status(201).json(data[0]))
         .catch((err) => res.status(500).send(err));
     }
   };

@@ -20,11 +20,9 @@ const animate = keyframes`
 
 export const Container = styled.li`
   background-color: ${props => props.theme.colors.tertiary};
-  width: 100%;
+  width: 300px;
   list-style: none;
   border-radius: 10px;
-
-  font-size: 20px;
 
   margin: 10px 0;
   padding: 12px 10px;
@@ -76,9 +74,4 @@ export const H3 = styled.h3`
 export const Flex = styled.div`
   display: flex;
   flex-direction: row !important;
-`;
-
-export const FlexColumn = styled.div`
-  display: flex;
-  flex-direction: column !important;
 `;

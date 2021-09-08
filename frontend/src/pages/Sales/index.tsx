@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import ContentHeader from '../../components/ContentHeader';
-import MediumCard from '../../components/MediumCard';
-import PurchasesCard from '../../components/PurchasesCard';
-import SalesCard from '../../components/SalesCard';
+import ProductListCard from '../../components/ProductListCard';
 import { getCustomers } from '../../services/api/customers';
 import { postPayments, putPayments } from '../../services/api/payments';
 import { getProducts } from '../../services/api/products';
-import { postPurchase, putPurchase } from '../../services/api/Purchase';
 import { postSale, putSale } from '../../services/api/Sale';
 import { getSales, postSales, putSales, removeSales } from '../../services/api/Sales';
 import { getSize } from '../../services/api/size';
 import { getTypePayments } from '../../services/api/type-payments';
 import { ICustomersData } from '../Customers';
 import { IProductsData } from '../Products';
+import { ISelectedProducts } from '../Purchases';
+import { FlexContainer } from '../Purchases/styles';
 import { IDataSize } from '../Sizes';
 import {
   Container,
@@ -54,7 +53,7 @@ export interface ISalesData {
   tamanhoId: number;
   compraId: number;
 
-  precoTotal: number;
+  precoTotal: number | string;
   parcela: number;
   tipoPagamentoId: number;
 
@@ -74,6 +73,10 @@ const Sales: React.FC<IRouteParams> = () => {
   const [dataTypePayments, setDataTypePayments] = useState<IDataSize[]>([]);
   const [id, setId] = useState<number>();
 
+  const [productId, setProductId] = useState<string>('');
+  const [productQuantity, setProductQuantity] = useState<string>('');
+  const [selectedProducts, setSelectedProducts] = useState<ISelectedProducts[]>([]);
+
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
 
@@ -82,7 +85,11 @@ const Sales: React.FC<IRouteParams> = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(`e`, e);
+
+    if (selectedProducts.length === 0) {
+      alert('Selecione pelo menos um prduto para continuar!');
+      return;
+    }
 
     const dataPayments = {
       precoTotal: formValues.precoTotal,
@@ -134,18 +141,36 @@ const Sales: React.FC<IRouteParams> = () => {
 
           await postSale(dataSale)
             .then(async (data: IResponse) => {
-              const dataSales = {
-                quantidade: formValues.quantidade,
-                produtoId: formValues.produtoId,
-                tamanhoId: formValues.tamanhoId,
-                vendaId: data.response.id,
-              };
+              await selectedProducts.forEach(selectedProduct => {
+                const dataSales = {
+                  quantidade: selectedProduct.quantidade,
+                  produtoId: selectedProduct.produtoId,
+                  tamanhoId: selectedProduct.tamanhoId,
+                  vendaId: data.response.id,
+                };
 
-              const { error, response }: IResponse = await postSales(dataSales);
-              if (error) {
-                alert(error.data);
-                return;
-              }
+                postSales(dataSales).then(cadastrado => {
+                  console.log(`cadastrado`, cadastrado);
+                  setSelectedProducts(selectedProducts =>
+                    selectedProducts.filter(
+                      selectedProducts => selectedProducts.produtoId !== selectedProduct.produtoId,
+                    ),
+                  );
+                });
+              });
+
+              // const dataSales = {
+              //   quantidade: formValues.quantidade,
+              //   produtoId: formValues.produtoId,
+              //   tamanhoId: formValues.tamanhoId,
+              //   vendaId: data.response.id,
+              // };
+
+              // const { error, response }: IResponse = await postSales(dataSales);
+              // if (error) {
+              //   alert(error.data);
+              //   return;
+              // }
 
               alert(`Venda criada com sucesso`);
             })
@@ -236,25 +261,11 @@ const Sales: React.FC<IRouteParams> = () => {
     setDataTypePayments(response.data);
   };
 
-  const deleteOrUpdateSales = async (id?: number, data?: ISalesData) => {
-    if (data) {
-      setFormValues(data);
-      setId(id);
-    } else {
-      if (window.confirm('Tem certeza que deseja excluir essa Venda?')) {
-        const { error }: IResponse = await removeSales(id);
-
-        if (error) {
-          alert(error.data);
-          return;
-        }
-
-        listSales();
-        listCustomers();
-        listProducts();
-        listSize();
-        listPayments();
-      }
+  const removeProduct = async (data?: ISelectedProducts) => {
+    if (window.confirm('Tem certeza que deseja excluir esse Produto?')) {
+      setSelectedProducts(selectedProducts =>
+        selectedProducts.filter(selectedProducts => selectedProducts.produtoId !== data.produtoId),
+      );
     }
   };
 
@@ -270,13 +281,28 @@ const Sales: React.FC<IRouteParams> = () => {
     setFormValues({ ...formValues, [event.target.name]: event.target.value });
   };
 
-  useEffect(() => {
-    if (formValues?.produtoId) {
-      const tamanhoIdProduct = dataProducts.filter(product => product.id == formValues.produtoId)[0];
-
-      setFormValues({ ...formValues, tamanhoId: tamanhoIdProduct?.tamanhoId });
+  const setProducts = () => {
+    if (selectedProducts.filter(selectedProducts => selectedProducts.produtoId === productId).length >= 1) {
+      alert('Produto ja selecionado!');
+      return;
     }
-  }, [formValues?.produtoId]);
+
+    const tamanhoIdProduct = dataProducts.filter(product => product.id.toString() === productId)[0];
+
+    setSelectedProducts(selectedProducts => [
+      ...selectedProducts,
+      {
+        produtoId: productId,
+        produtoName: tamanhoIdProduct.descricao,
+        tamanhoId: tamanhoIdProduct.tamanhoId.toString(),
+        tamanhoName: tamanhoIdProduct.descricaoTamanho,
+        quantidade: productQuantity,
+      },
+    ]);
+
+    setProductId('');
+    setProductQuantity('');
+  };
 
   return (
     <Container>
@@ -288,43 +314,29 @@ const Sales: React.FC<IRouteParams> = () => {
         <ContentForm>
           <Form onSubmit={handleSubmit}>
             <FormTitle>Realizar Venda</FormTitle>
-
             <Select name="clienteId" onChange={onChange} value={formValues?.clienteId}>
               <option value="">Selecione o Cliente</option>
               {dataCustomers && dataCustomers.map(provider => <option value={provider.id}>{provider.nome}</option>)}
             </Select>
-
-            <Select name="produtoId" onChange={onChange} value={formValues?.produtoId}>
-              <option value="">Selecione o Produto</option>
-              {dataProducts &&
-                dataProducts.map(product => (
-                  <option value={product.id}>
-                    {product.descricao} - {product.descricaoTamanho}
-                  </option>
-                ))}
-            </Select>
-
             {/* <Select placeholder="selecione">
               <option value="">Selecione o Tamanho</option>
               {dataSizes && dataSizes.map(size => <option value={size.id}>{size.descricao}</option>)}
             </Select> */}
-
             <Select name="tipoPagamentoId" onChange={onChange} value={formValues?.tipoPagamentoId}>
               <option value="">Selecione o Tipo de Pagamento</option>
               {dataTypePayments &&
                 dataTypePayments.map(typePayments => <option value={typePayments.id}>{typePayments.descricao}</option>)}
             </Select>
-
             <Flex>
               <ContainerInput>
                 <InputForm
                   type="number"
-                  name="quantidade"
+                  name="parcela"
                   onChange={handleInputChange}
-                  value={formValues?.quantidade}
+                  value={formValues?.parcela}
                   required
                 />
-                <Span>Quantidade</Span>
+                <Span>Parcela</Span>
               </ContainerInput>
 
               <ContainerInput>
@@ -338,26 +350,45 @@ const Sales: React.FC<IRouteParams> = () => {
                 <Span>Preço total</Span>
               </ContainerInput>
             </Flex>
+            Selecione o Produto
+            <FlexContainer>
+              <Select name="produtoId" onChange={event => setProductId(event.target.value)} value={productId}>
+                <option value="">Selecione o Produto</option>
+                {dataProducts &&
+                  dataProducts.map(product => (
+                    <option value={product.id}>
+                      {product.descricao} - {product.descricaoTamanho}
+                    </option>
+                  ))}
+              </Select>
 
-            <ContainerInput>
-              <InputForm
-                type="number"
-                name="parcela"
-                onChange={handleInputChange}
-                value={formValues?.parcela}
-                required
-              />
-              <Span>Parcela</Span>
-            </ContainerInput>
+              <ContainerInput>
+                <InputForm
+                  type="number"
+                  name="quantidade"
+                  onChange={event => setProductQuantity(event.target.value)}
+                  value={productQuantity}
+                />
+                <Span>Quantidade</Span>
+              </ContainerInput>
 
+              <Button style={{ width: '150px', height: '40px', margin: '0' }} type="button" onClick={setProducts}>
+                Salvar Produto
+              </Button>
+            </FlexContainer>
             <Button type="submit">Enviar</Button>
           </Form>
         </ContentForm>
         <ContentList>
           <List>
-            {data &&
-              data.map(item => (
-                <SalesCard key={item.id} tagColor="#05a048" data={item} callback={deleteOrUpdateSales} />
+            {selectedProducts &&
+              selectedProducts.map(selectedProducts => (
+                <ProductListCard
+                  key={selectedProducts.produtoId}
+                  tagColor="#05a048"
+                  data={selectedProducts}
+                  callback={removeProduct}
+                />
               ))}
           </List>
         </ContentList>

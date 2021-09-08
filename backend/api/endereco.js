@@ -46,7 +46,8 @@ module.exports = (app) => {
       app
         .db("endereco")
         .insert(endereco)
-        .then(() => returnData())
+        .returning("*")
+        .then((data) => res.status(201).json(data)) //returnData())
         .catch((err) => res.status(500).send(err));
     }
 

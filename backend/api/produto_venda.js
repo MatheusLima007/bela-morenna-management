@@ -7,7 +7,6 @@ module.exports = (app) => {
     const produtoVenda = {
       id: produtoVendaBody.id,
       quantidade: produtoVendaBody.quantidade,
-      data: produtoVendaBody.data,
       produtoId: produtoVendaBody.produtoId,
       tamanhoId: produtoVendaBody.tamanhoId,
       vendaId: produtoVendaBody.vendaId,
@@ -35,7 +34,8 @@ module.exports = (app) => {
       app
         .db("produto_venda")
         .insert(produtoVenda)
-        .then((_) => res.status(201).json(produtoVenda))
+        .returning("*")
+        .then((data) => res.status(201).json(data[0]))
         .catch((err) => res.status(500).send(err));
     }
   };

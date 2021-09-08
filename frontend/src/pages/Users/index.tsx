@@ -149,7 +149,7 @@ const Users: React.FC<IRouteParams> = () => {
     setId(0);
     listUsers();
   };
-  console.log(`formValues`, formValues);
+  //console.log(`formValues`, formValues);
   const listUsers = async (data?: any) => {
     const { error, response }: IResponse = await getUsers(data);
 

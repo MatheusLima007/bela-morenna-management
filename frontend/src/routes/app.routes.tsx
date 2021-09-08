@@ -3,7 +3,8 @@ import { Route, Switch } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Customers from '../pages/Customers';
 import Dashboard from '../pages/Dashboard';
-import List from '../pages/List';
+import ListPurchases from '../pages/ListPurchases';
+import ListSales from '../pages/ListSales';
 import Payments from '../pages/Payments';
 import Products from '../pages/Products';
 import Providers from '../pages/Providers';
@@ -19,7 +20,8 @@ const AppRoutes: React.FC = () => (
     <Switch>
       <Route path="/dashboard" exact component={Dashboard} />
       <Route path="/reports" exact component={Reports} />
-      <Route path="/list/:type" exact component={List} />
+      <Route path="/list/exit-balance/:id?" component={ListPurchases} />
+      <Route path="/list/entry-balance/:id?" component={ListSales} />
       <Route path="/register/sales" component={Sales} />
       <Route path="/register/sizes" component={Sizes} />
       <Route path="/register/payments" component={Payments} />

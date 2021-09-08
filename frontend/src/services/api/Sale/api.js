@@ -6,9 +6,9 @@ const api = axios.create({
 
 export async function getSale(data) {
   try {
-    return await api.get(`vendas?${data}`).then(response => {
+    return await api.get('vendas').then(response => {
       //console.log(`response.data`, response.data)
-      return { response: response.data };
+      return { data: response.data };
     });
   } catch (error) {
     return { error: error.response };
@@ -18,7 +18,7 @@ export async function getSale(data) {
 export async function getByIdSale(id) {
   try {
     return await api.get(`vendas/${id}`).then(response => {
-      return { response: response.data };
+      return { data: response.data };
     });
   } catch (error) {
     return { error: error.response };
@@ -48,7 +48,7 @@ export async function putSale(data, id) {
 export async function removeSale(id) {
   try {
     return await api.delete(`vendas/${id}`).then(response => {
-      return { response: response.data };
+      return { data: response.data };
     });
   } catch (error) {
     return { error: error.response };
